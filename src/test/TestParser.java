@@ -34,10 +34,7 @@ class TestParser {
         Parser parse = new Parser(scan);
 
         NodeProgram test = parse.parse();
-        ArrayList<NodeDecSt> dec = test.getDecSts();
 
-        for (NodeDecSt st : dec) {
-            System.out.println(st.toString());
-        }
+        System.out.println(test.toString());
     }
 }

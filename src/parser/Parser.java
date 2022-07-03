@@ -24,41 +24,37 @@ public class Parser {
 
     private NodeProgram parsePrg() throws Exception {
         Token tk = scanner.peekToken();
+        ArrayList<NodeDecSt> decSts = new ArrayList<>();
+        System.out.println("ParsePrg " + tk.toString());
 
         switch (tk.getTipo()) {
-            case TYFLOAT:
-            case TYINT:
-            case PRINT:
-            case ID:
-            case EOF:
-                NodeProgram np = new NodeProgram(parseDSs());
+            case TYFLOAT, TYINT, PRINT, ID, EOF -> {
+                NodeProgram np = new NodeProgram(parseDSs(decSts));
                 match(TokenType.EOF);
                 return np;
-            default:
-                throw new SyntaxException("Token inaspettato parsePrg");
+            }
+            default -> throw new SyntaxException("Token inaspettato parsePrg");
         }
     }
 
-    private ArrayList<NodeDecSt> parseDSs() throws Exception {
+    private ArrayList<NodeDecSt> parseDSs(ArrayList<NodeDecSt> decSts) throws Exception {
         Token tk = scanner.peekToken();
-        ArrayList<NodeDecSt> decSts = new ArrayList<>();
+        System.out.println("ParseDSs " + tk.toString());
 
         switch (tk.getTipo()) {
-            case TYINT:
-            case TYFLOAT:
+            case TYINT, TYFLOAT -> {
                 decSts.add(parseDcl());
-                parseDSs();
-                break;
-            case ID:
-            case PRINT:
+                parseDSs(decSts);
+            }
+            case ID, PRINT -> {
                 decSts.add(parseStm());
-                parseDSs();
-                break;
-            case EOF:
+                parseDSs(decSts);
+            }
+            case EOF -> {
                 match(TokenType.EOF);
-                return null;
-            default:
-                throw new SyntaxException("Unexpected value parseDSs: " + tk.getTipo());
+                return decSts;
+            }
+            default -> throw new SyntaxException("Unexpected value parseDSs: " + tk.getTipo());
         }
         return decSts;
     }
@@ -67,63 +63,66 @@ public class Parser {
         Token tk = scanner.peekToken();
         NodeStm stm = null;
 
+        System.out.println("ParseStm " + tk.toString());
+
         switch (tk.getTipo()) {
-            case PRINT:
+            case PRINT -> {
                 match(TokenType.PRINT);
-                match(TokenType.ID);
+                String id = match(TokenType.ID).getVal();
                 match(TokenType.SEMI);
-                return new NodePrint(new NodeId("print"));
-            case ID:
+                return new NodePrint(new NodeId(id));
+            }
+            case ID -> {
                 match(TokenType.ID);
                 match(TokenType.ASSIGN);
                 parseExp();
                 match(TokenType.SEMI);
                 return stm;
-            default:
-                throw new SyntaxException("Unexpected value parseStm: " + tk.getTipo());
+            }
+            default -> throw new SyntaxException("Unexpected value parseStm: " + tk.getTipo());
         }
     }
 
     private NodeDecl parseDcl() throws Exception {
         Token tk = scanner.peekToken();
+        System.out.println("ParseDcl " + tk.toString());
 
         switch (tk.getTipo()) {
-
-            case TYFLOAT:
+            case TYFLOAT -> {
                 match(TokenType.TYFLOAT);
                 NodeDecl nf = new NodeDecl(new NodeId(scanner.peekToken().getVal()), LangType.FLOAT);
                 match(TokenType.ID);
                 match(TokenType.SEMI);
                 return nf;
-            case TYINT:
+            }
+            case TYINT -> {
                 match(TokenType.TYINT);
                 NodeDecl ni = new NodeDecl(new NodeId(scanner.peekToken().getVal()), LangType.INT);
                 match(TokenType.ID);
                 match(TokenType.SEMI);
                 return ni;
-            default:
-                throw new SyntaxException("Unexpected value parseDcl: " + tk.getTipo());
+            }
+            default -> throw new SyntaxException("Unexpected value parseDcl: " + tk.getTipo());
         }
     }
 
     private NodeExpr parseExp() throws Exception {
         Token tk = scanner.peekToken();
+        System.out.println("ParseExp " + tk.toString());
 
         switch (tk.getTipo()) {
-            case INT:
-            case FLOAT:
-            case ID:
+            case INT, FLOAT, ID -> {
                 parseTr();
                 parseExpP();
-                break;
-            default:
-                throw new SyntaxException("Unexpected value parseExp: " + tk.getTipo());
+            }
+            default -> throw new SyntaxException("Unexpected value parseExp: " + tk.getTipo());
         }
         return null;
     }
 
     private NodeExpr parseExpP() throws Exception {
         Token tk = scanner.peekToken();
+        System.out.println("ParseExpP " + tk.toString());
 
         switch (tk.getTipo()) {
             case PLUS:
@@ -146,22 +145,21 @@ public class Parser {
 
     private NodeExpr parseTr() throws Exception {
         Token tk = scanner.peekToken();
+        System.out.println("ParseTr " + tk.toString());
 
         switch (tk.getTipo()) {
-            case INT:
-            case FLOAT:
-            case ID:
+            case INT, FLOAT, ID -> {
                 parseVal();
                 parseTrP();
-                break;
-            default:
-                throw new SyntaxException("Unexpected value parseTr: " + tk.getTipo());
+            }
+            default -> throw new SyntaxException("Unexpected value parseTr: " + tk.getTipo());
         }
         return null;
     }
 
     private NodeExpr parseTrP() throws Exception {
         Token tk = scanner.peekToken();
+        System.out.println("ParseTrP " + tk.toString());
 
         switch (tk.getTipo()) {
             case TIMES:
@@ -186,19 +184,13 @@ public class Parser {
 
     private NodeExpr parseVal() throws Exception {
         Token tk = scanner.peekToken();
+        System.out.println("ParseVal " + tk.toString());
 
         switch (tk.getTipo()) {
-            case INT:
-                match(TokenType.INT);
-                break;
-            case FLOAT:
-                match(TokenType.FLOAT);
-                break;
-            case ID:
-                match(TokenType.ID);
-                break;
-            default:
-                throw new SyntaxException("Unexpected value parseVal: " + tk.getTipo());
+            case INT -> match(TokenType.INT);
+            case FLOAT -> match(TokenType.FLOAT);
+            case ID -> match(TokenType.ID);
+            default -> throw new SyntaxException("Unexpected value parseVal: " + tk.getTipo());
         }
         return null;
     }
