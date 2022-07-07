@@ -51,11 +51,17 @@ class TestToken {
 
         Scanner scan = new Scanner("/home/jacopo/Git/CompilatoreAcDc/src/test/data/testParser/testParserCorretto1.txt");
 
-        Token t = scan.nextToken();
-        while(t.getTipo() != TokenType.EOF) {
-            System.out.println(t.toString());
+        Token t = null;
+        try {
             t = scan.nextToken();
+            while(t.getTipo() != TokenType.EOF) {
+                System.out.println(t.toString());
+                t = scan.nextToken();
+            }
+        } catch (LexicalException e) {
+            throw new RuntimeException(e);
         }
+
 
     }
 
