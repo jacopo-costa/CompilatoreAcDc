@@ -2,7 +2,7 @@ package ast;
 
 import java.util.ArrayList;
 
-public class NodeProgram extends NodeAST{
+public class NodeProgram extends NodeAST {
 
     private ArrayList<NodeDecSt> decSts;
 

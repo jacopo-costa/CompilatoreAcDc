@@ -1,6 +1,6 @@
 package ast;
 
-public class NodeCost extends NodeExpr{
+public class NodeCost extends NodeExpr {
 
     private String value;
     private LangType type;

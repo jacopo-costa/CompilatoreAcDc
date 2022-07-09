@@ -1,6 +1,6 @@
 package ast;
 
-public class NodePrint extends NodeStm{
+public class NodePrint extends NodeStm {
 
     private NodeId id;
 

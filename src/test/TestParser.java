@@ -1,22 +1,15 @@
 package test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-
-import ast.NodeDecSt;
-import ast.NodeDecl;
-import ast.NodeProgram;
-import exception.LexicalException;
 import org.junit.jupiter.api.Test;
-
+import org.junit.platform.commons.annotation.Testable;
 import parser.Parser;
 import scanner.Scanner;
-import token.Token;
-import token.TokenType;
 
+import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
+@Testable
 class TestParser {
 
     @Test
@@ -26,15 +19,5 @@ class TestParser {
         Parser parse = new Parser(scan);
         assertDoesNotThrow(() -> parse.parse());
 
-    }
-
-    @Test
-    void testAST () throws Exception {
-        Scanner scan = new Scanner("src/test/data/testParser/testParserCorretto1.txt");
-        Parser parse = new Parser(scan);
-
-        NodeProgram test = parse.parse();
-
-        System.out.println(test.toString());
     }
 }

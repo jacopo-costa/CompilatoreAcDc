@@ -1,6 +1,6 @@
 package exception;
 
-public class LexicalException extends Exception{
+public class LexicalException extends Exception {
 
     public LexicalException() {
         super();

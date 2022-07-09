@@ -1,5 +1,9 @@
 package scanner;
 
+import exception.LexicalException;
+import token.Token;
+import token.TokenType;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -8,10 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
-import exception.LexicalException;
-import token.Token;
-import token.TokenType;
 
 public class Scanner {
     final char EOF = (char) -1; // int 65535
@@ -148,12 +148,8 @@ public class Scanner {
 
         // Altrimenti il carattere NON E' UN CARATTERE LEGALE
 
-        while(nextChar != '\n' && nextChar != EOF){
-            readChar();
-            nextChar = peekChar();
-        }
-        riga++;
-        return currentToken;
+        readChar();
+        return null;
 
     }
 
@@ -173,21 +169,12 @@ public class Scanner {
         char nextChar = peekChar();
         StringBuilder id = new StringBuilder();
 
-        while (letters.contains(nextChar)) {
-
+        //Accetta solo ID che iniziano con una lettera e poi possono avere
+        //anche numeri
+        while (letters.contains(nextChar) || numbers.contains(nextChar)) {
             id.append(nextChar);
             readChar();
             nextChar = peekChar();
-
-        }
-
-        if(nextChar != ';' && !skipChars.contains(nextChar)){
-            while(nextChar != '\n' && nextChar != EOF){
-                readChar();
-                nextChar = peekChar();
-            }
-            riga ++;
-            throw new LexicalException("Carattere illegale dopo un ID");
         }
 
         if (keyWordsMap.containsKey(id.toString())) {
@@ -200,9 +187,7 @@ public class Scanner {
             }
         }
 
-
         return new Token(TokenType.ID, riga, id.toString());
-
     }
 
     private Token scanNumber() throws Exception {
@@ -224,12 +209,7 @@ public class Scanner {
             readChar();
             nextChar = peekChar();
 
-            if(!numbers.contains(nextChar)){
-                while(nextChar != '\n' && nextChar != EOF){
-                    System.out.println("qui");
-                    readChar();
-                    nextChar = peekChar();
-                }
+            if (!numbers.contains(nextChar)) {
                 throw new LexicalException("Trovato un carattere illegale dopo un punto float");
             }
             //Legge al più 5 numeri dopo la virgola
@@ -238,25 +218,17 @@ public class Scanner {
                     number.append(nextChar);
                     readChar();
                     nextChar = peekChar();
-                } else if (nextChar == ';' || nextChar == '\n'){
+                } else if (skipChars.contains(nextChar) || operatorsMap.containsKey(nextChar)) {
                     return new Token(type, riga, number.toString());
                 } else {
                     throw new LexicalException("Carattere illegale in float");
                 }
             }
-            while(skipChars.contains(nextChar)){
-                readChar();
-                nextChar = peekChar();
+            if (numbers.contains(nextChar)) {
+                throw new LexicalException("Eccessivi decimali dopo la virgola");
             }
-        }
-
-        if(nextChar != ';' && !skipChars.contains(nextChar)){
-            System.out.println("qui2");
-            while(skipChars.contains(nextChar)){
-                readChar();
-                nextChar = peekChar();
-            }
-            throw new LexicalException("Trovato un carattere illegale dopo un INT");
+        } else if (!skipChars.contains(nextChar) && !operatorsMap.containsKey(nextChar)) {
+            throw new LexicalException("Numero seguito da un carattere illegale");
         }
 
         return new Token(type, riga, number.toString());

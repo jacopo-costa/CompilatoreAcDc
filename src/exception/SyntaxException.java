@@ -1,6 +1,6 @@
 package exception;
 
-public class SyntaxException extends Exception{
+public class SyntaxException extends Exception {
 
     public SyntaxException() {
         super();

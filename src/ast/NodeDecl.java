@@ -1,6 +1,6 @@
 package ast;
 
-public class NodeDecl extends NodeDecSt{
+public class NodeDecl extends NodeDecSt {
 
     private NodeId id;
     private LangType type;

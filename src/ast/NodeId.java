@@ -1,6 +1,6 @@
 package ast;
 
-public class NodeId extends NodeAST{
+public class NodeId extends NodeAST {
 
     private String name;
 

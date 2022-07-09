@@ -6,5 +6,5 @@ public enum LangOper {
     MINUS,
     DIV,
     TIMES;
-    
+
 }
