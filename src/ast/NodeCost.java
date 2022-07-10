@@ -20,7 +20,6 @@ public class NodeCost extends NodeExpr {
 
     @Override
     public String toString() {
-        return "Value = " + value +
-                "\nType = " + type.toString();
+        return value + " Type : " + type.toString();
     }
 }

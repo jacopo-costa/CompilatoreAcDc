@@ -26,8 +26,6 @@ public class NodeBinOp extends NodeExpr {
 
     @Override
     public String toString() {
-        return "Op = " + op +
-                "\nLeft = " + left +
-                "\nRight = " + right;
+        return "[" + op + " (Left: " + left + ") (Right: " + right + ")]";
     }
 }

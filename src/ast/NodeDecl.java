@@ -20,7 +20,6 @@ public class NodeDecl extends NodeDecSt {
 
     @Override
     public String toString() {
-        return "ID = " + id +
-                "\nType = " + type.toString();
+        return  "Decl: <" + id.toString() + ", " + type.toString() + ">";
     }
 }
