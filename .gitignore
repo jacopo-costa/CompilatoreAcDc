@@ -24,3 +24,9 @@ hs_err_pid*
 
 # IDEA folder
 .idea/
+
+#Attach pid
+.attach_pid*
+
+#out folder
+out/

@@ -1,5 +1,7 @@
 package ast;
 
+import visitor.IVisitor;
+
 public class NodeDecl extends NodeDecSt {
 
     private NodeId id;
@@ -20,6 +22,11 @@ public class NodeDecl extends NodeDecSt {
 
     @Override
     public String toString() {
-        return  "Decl: <" + id.toString() + ", " + type.toString() + ">";
+        return "Decl: <" + id.toString() + ", " + type.toString() + ">";
+    }
+
+    @Override
+    public void accept(IVisitor visitor) {
+        visitor.visit(this);
     }
 }

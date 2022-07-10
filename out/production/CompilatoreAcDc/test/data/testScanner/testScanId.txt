@@ -1,6 +1,0 @@
-int
-float
-print
-nome
-intnome
-int nome

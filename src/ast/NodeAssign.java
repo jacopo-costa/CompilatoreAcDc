@@ -1,5 +1,7 @@
 package ast;
 
+import visitor.IVisitor;
+
 public class NodeAssign extends NodeStm {
 
     private NodeId id;
@@ -21,5 +23,10 @@ public class NodeAssign extends NodeStm {
     @Override
     public String toString() {
         return "Assign: <" + id.toString() + ", " + expr + ">";
+    }
+
+    @Override
+    public void accept(IVisitor visitor) {
+        visitor.visit(this);
     }
 }

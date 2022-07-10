@@ -116,13 +116,13 @@ public class Parser {
             case PLUS:
                 match(TokenType.PLUS);
                 NodeExpr trP = parseTr();
-                NodeExpr expP = parseExpP(trP);
-                return new NodeBinOp(LangOper.PLUS, left, expP);
+                NodeExpr expP = parseExpP(new NodeBinOp(LangOper.PLUS, left, trP));
+                return expP;
             case MINUS:
                 match(TokenType.MINUS);
                 NodeExpr trM = parseTr();
-                NodeExpr expM = parseExpP(trM);
-                return new NodeBinOp(LangOper.MINUS, left, expM);
+                NodeExpr expM = parseExpP(new NodeBinOp(LangOper.MINUS, left, trM));
+                return expM;
             case SEMI:
                 return left;
             default:
@@ -149,23 +149,23 @@ public class Parser {
             case TIMES:
                 match(TokenType.TIMES);
                 NodeExpr terT = parseVal();
-                NodeExpr trpT = parseTrP(terT);
-                return new NodeBinOp(LangOper.TIMES, left, trpT);
+                NodeExpr trpT = parseTrP(new NodeBinOp(LangOper.TIMES, left, terT));
+                return trpT;
             case DIV:
                 match(TokenType.DIV);
                 NodeExpr terD = parseVal();
-                NodeExpr trpD = parseTrP(terD);
-                return new NodeBinOp(LangOper.DIV, left, trpD);
+                NodeExpr trpD = parseTrP(new NodeBinOp(LangOper.DIV, left, terD));
+                return trpD;
             case PLUS:
                 match(TokenType.PLUS);
                 NodeExpr terP = parseVal();
-                NodeExpr trpP = parseTrP(terP);
-                return new NodeBinOp(LangOper.PLUS, left, trpP);
+                NodeExpr trpP = parseTrP(new NodeBinOp(LangOper.PLUS, left, terP));
+                return trpP;
             case MINUS:
                 match(TokenType.MINUS);
                 NodeExpr terM = parseVal();
-                NodeExpr trpM = parseTrP(terM);
-                return new NodeBinOp(LangOper.MINUS, left, trpM);
+                NodeExpr trpM = parseTrP(new NodeBinOp(LangOper.MINUS, left, terM));
+                return trpM;
             case SEMI:
                 return left;
             default:

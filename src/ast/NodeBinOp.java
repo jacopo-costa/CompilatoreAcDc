@@ -1,5 +1,7 @@
 package ast;
 
+import visitor.IVisitor;
+
 public class NodeBinOp extends NodeExpr {
 
     private LangOper op;
@@ -26,6 +28,11 @@ public class NodeBinOp extends NodeExpr {
 
     @Override
     public String toString() {
-        return "[" + op + " (Left: " + left + ") (Right: " + right + ")]";
+        return "(Left: " + left + " " + op + " Right: " + right + ")";
+    }
+
+    @Override
+    public void accept(IVisitor visitor) {
+        visitor.visit(this);
     }
 }

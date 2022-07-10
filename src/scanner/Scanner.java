@@ -15,9 +15,8 @@ import java.util.List;
 
 public class Scanner {
     final char EOF = (char) -1; // int 65535
-    private int riga;
     private final PushbackReader buffer;
-
+    private int riga;
     private Token currentToken;
 
     private List<Character> skipChars; // ' ', '\n', '\t', '\r', EOF
