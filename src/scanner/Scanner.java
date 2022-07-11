@@ -147,7 +147,7 @@ public class Scanner {
     }
 
     private char peekChar() {
-        char c = 0;
+        char c;
         try {
             c = (char) buffer.read();
             buffer.unread(c);

@@ -6,9 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.annotation.Testable;
 import parser.Parser;
 import scanner.Scanner;
+import symbolTable.SymbolTable;
 import visitor.TypeCheckingVisitor;
-
-import java.io.FileNotFoundException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -20,11 +19,13 @@ public class TestVisitor {
 
         NodeProgram np = new Parser(new Scanner("src/test/data/testTypeChecking/1_dicRipetute.txt")).parse();
         TypeCheckingVisitor visitor = new TypeCheckingVisitor();
+        SymbolTable.init();
         np.accept(visitor);
 
         String log = "ID: a already present";
 
         assertEquals(log, visitor.getLog());
+        assertEquals(TypeDescriptor.ERROR, np.getResType());
 
     }
 
@@ -32,6 +33,7 @@ public class TestVisitor {
     void testFileCorretto() throws Exception {
 
         NodeProgram np = new Parser(new Scanner("src/test/data/testTypeChecking/2_fileCorrect.txt")).parse();
+        SymbolTable.init();
         np.accept(new TypeCheckingVisitor());
 
         assertEquals(TypeDescriptor.VOID, np.getResType());
@@ -43,11 +45,13 @@ public class TestVisitor {
 
         NodeProgram np = new Parser(new Scanner("src/test/data/testTypeChecking/3_IdNotDeclare.txt")).parse();
         TypeCheckingVisitor visitor = new TypeCheckingVisitor();
+        SymbolTable.init();
         np.accept(visitor);
 
         String log = "ID: b not present in Symbol Table\nID: c not present in Symbol Table\n";
 
         assertEquals(log, visitor.getLog());
+        assertEquals(TypeDescriptor.ERROR, np.getResType());
 
     }
 
@@ -56,6 +60,7 @@ public class TestVisitor {
 
         NodeProgram np = new Parser(new Scanner("src/test/data/testTypeChecking/errorAssignConvert.txt")).parse();
         TypeCheckingVisitor visitor = new TypeCheckingVisitor();
+        SymbolTable.init();
         np.accept(visitor);
 
         //Prima rileva che a non è presente poi dice che alla riga 3
@@ -68,6 +73,7 @@ public class TestVisitor {
                 """;
 
         assertEquals(log, visitor.getLog());
+        assertEquals(TypeDescriptor.ERROR, np.getResType());
 
     }
 
@@ -76,6 +82,7 @@ public class TestVisitor {
 
         NodeProgram np = new Parser(new Scanner("src/test/data/testTypeChecking/errorOp.txt")).parse();
         TypeCheckingVisitor visitor = new TypeCheckingVisitor();
+        SymbolTable.init();
         np.accept(visitor);
 
         //b non può eseguire una operazione su se stesso non ancora inizializzato
@@ -90,6 +97,7 @@ public class TestVisitor {
                 """;
 
         assertEquals(log, visitor.getLog());
+        assertEquals(TypeDescriptor.ERROR, np.getResType());
 
     }
 
@@ -97,6 +105,7 @@ public class TestVisitor {
     void testFileCorretto2() throws Exception {
 
         NodeProgram np = new Parser(new Scanner("src/test/data/testTypeChecking/fileCorrect2.txt")).parse();
+        SymbolTable.init();
         np.accept(new TypeCheckingVisitor());
 
         assertEquals(TypeDescriptor.VOID, np.getResType());
@@ -108,6 +117,7 @@ public class TestVisitor {
 
         NodeProgram np = new Parser(new Scanner("src/test/data/testTypeChecking/testGenerale.txt")).parse();
         TypeCheckingVisitor visitor = new TypeCheckingVisitor();
+        SymbolTable.init();
         np.accept(visitor);
 
         //Assegnamento illegale poichè alla riga 4 viene eseguita una operazione binaria su b
@@ -115,6 +125,7 @@ public class TestVisitor {
         String log = "Illegal assignment: Assign: <ID: b, (Left: (Left: ID: a MINUS Right: <3.2 Type : FLOAT>) DIV Right: ID: b)>\n";
 
         assertEquals(log, visitor.getLog());
+        assertEquals(TypeDescriptor.ERROR, np.getResType());
 
     }
 
@@ -122,6 +133,7 @@ public class TestVisitor {
     void testGenerale2() throws Exception {
 
         NodeProgram np = new Parser(new Scanner("src/test/data/testTypeChecking/testGenerale2.txt")).parse();
+        SymbolTable.init();
         np.accept(new TypeCheckingVisitor());
 
         assertEquals(TypeDescriptor.VOID, np.getResType());
@@ -132,6 +144,7 @@ public class TestVisitor {
     void testGenerator() throws Exception {
 
         NodeProgram np = new Parser(new Scanner("src/test/data/testTypeChecking/testGenerator.txt")).parse();
+        SymbolTable.init();
         np.accept(new TypeCheckingVisitor());
 
         assertEquals(TypeDescriptor.VOID, np.getResType());

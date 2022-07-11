@@ -8,6 +8,16 @@ public class Attributes {
 
     private char registro;
 
+    private boolean initialized = false;
+
+    public void setInitialized(boolean initialized) {
+        this.initialized = initialized;
+    }
+
+    public boolean isInitialized() {
+        return initialized;
+    }
+
     public char getRegistro() {
         return registro;
     }

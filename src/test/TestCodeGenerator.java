@@ -1,6 +1,5 @@
 package test;
 
-import ast.NodeDecSt;
 import ast.NodeProgram;
 import org.junit.jupiter.api.Test;
 import parser.Parser;
@@ -17,11 +16,13 @@ public class TestCodeGenerator {
     void testGenerator() throws Exception {
 
         NodeProgram np = new Parser(new Scanner("src/test/data/testTypeChecking/testGenerator.txt")).parse();
+        SymbolTable.init();
         np.accept(new TypeCheckingVisitor());
         CodeGeneratorVisitor cgv = new CodeGeneratorVisitor();
         np.accept(cgv);
 
-        assertEquals(new String("1.0 6 5 k / sb 0 k lb p P 1 6 / sa 0 k la p P "), cgv.getCode().toString());
+        assertEquals("1.0 6 5 k / sb 0 k lb p P 1 6 / sa 0 k la p P ", cgv.getCode().toString());
+        assertEquals("", cgv.getLog().toString());
 
     }
 

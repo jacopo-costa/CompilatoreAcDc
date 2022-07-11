@@ -117,13 +117,11 @@ public class Parser {
             case PLUS:
                 match(TokenType.PLUS);
                 NodeExpr trP = parseTr();
-                NodeExpr expP = parseExpP(new NodeBinOp(LangOper.PLUS, left, trP));
-                return expP;
+                return parseExpP(new NodeBinOp(LangOper.PLUS, left, trP));
             case MINUS:
                 match(TokenType.MINUS);
                 NodeExpr trM = parseTr();
-                NodeExpr expM = parseExpP(new NodeBinOp(LangOper.MINUS, left, trM));
-                return expM;
+                return parseExpP(new NodeBinOp(LangOper.MINUS, left, trM));
             case SEMI:
                 return left;
             default:
@@ -150,23 +148,19 @@ public class Parser {
             case TIMES:
                 match(TokenType.TIMES);
                 NodeExpr terT = parseVal();
-                NodeExpr trpT = parseTrP(new NodeBinOp(LangOper.TIMES, left, terT));
-                return trpT;
+                return parseTrP(new NodeBinOp(LangOper.TIMES, left, terT));
             case DIV:
                 match(TokenType.DIV);
                 NodeExpr terD = parseVal();
-                NodeExpr trpD = parseTrP(new NodeBinOp(LangOper.DIV, left, terD));
-                return trpD;
+                return parseTrP(new NodeBinOp(LangOper.DIV, left, terD));
             case PLUS:
                 match(TokenType.PLUS);
                 NodeExpr terP = parseVal();
-                NodeExpr trpP = parseTrP(new NodeBinOp(LangOper.PLUS, left, terP));
-                return trpP;
+                return parseTrP(new NodeBinOp(LangOper.PLUS, left, terP));
             case MINUS:
                 match(TokenType.MINUS);
                 NodeExpr terM = parseVal();
-                NodeExpr trpM = parseTrP(new NodeBinOp(LangOper.MINUS, left, terM));
-                return trpM;
+                return parseTrP(new NodeBinOp(LangOper.MINUS, left, terM));
             case SEMI:
                 return left;
             default:

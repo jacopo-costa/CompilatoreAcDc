@@ -14,14 +14,18 @@ public class TypeCheckingVisitor implements IVisitor {
 
     @Override
     public void visit(NodeProgram node) {
-        SymbolTable.init();
+        boolean err = false;
         for (NodeDecSt n : node) {
             n.accept(this);
             if (n.getResType() == TypeDescriptor.ERROR) {
-                node.setResType(TypeDescriptor.ERROR);
+                err = true;
             }
         }
-        node.setResType(TypeDescriptor.VOID);
+        if(err){
+            node.setResType(TypeDescriptor.ERROR);
+        } else {
+            node.setResType(TypeDescriptor.VOID);
+        }
     }
 
     @Override
@@ -54,9 +58,9 @@ public class TypeCheckingVisitor implements IVisitor {
         id.accept(this);
         if (id.getResType() == TypeDescriptor.ERROR) {
             node.setResType(TypeDescriptor.ERROR);
+        } else {
+            node.setResType(id.getResType());
         }
-
-        node.setResType(id.getResType());
     }
 
     @Override
@@ -64,6 +68,8 @@ public class TypeCheckingVisitor implements IVisitor {
         if (!SymbolTable.enter(node.getId().getName(), new Attributes(node.getType()))) {
             node.setResType(TypeDescriptor.ERROR);
             log.append(node.getId()).append(" already present");
+        } else {
+            node.setResType(TypeDescriptor.valueOf(node.getType().toString()));
         }
     }
 
@@ -78,7 +84,7 @@ public class TypeCheckingVisitor implements IVisitor {
         node.getLeft().accept(this);
         node.getRight().accept(this);
 
-        if (node.getRight().getResType() == TypeDescriptor.ERROR || node.getRight().getResType() == TypeDescriptor.ERROR) {
+        if (node.getLeft().getResType() == TypeDescriptor.ERROR || node.getRight().getResType() == TypeDescriptor.ERROR) {
             node.setResType(TypeDescriptor.ERROR);
             log.append("Illegal binary operation: ").append(node).append("\n");
         } else if (node.getRight().getResType() == node.getLeft().getResType()) {
@@ -103,8 +109,9 @@ public class TypeCheckingVisitor implements IVisitor {
             node.setExpr(conv);
         } else if (node.getId().getResType() == node.getExpr().getResType()) {
             node.setResType(node.getId().getResType());
+        } else {
+            node.setResType(TypeDescriptor.VOID);
         }
-        node.setResType(TypeDescriptor.VOID);
     }
 
     @Override

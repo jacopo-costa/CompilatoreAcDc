@@ -15,7 +15,7 @@ public class CodeGeneratorVisitor implements IVisitor{
     private final StringBuilder code = new StringBuilder();
 
     private static int iterator;
-    private static List<Character> register = new ArrayList<>(Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'));
+    private static final List<Character> register = new ArrayList<>(Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'));
 
     private static char newRegister() {
         char reg = register.get(iterator);
@@ -43,9 +43,15 @@ public class CodeGeneratorVisitor implements IVisitor{
 
     @Override
     public void visit(NodePrint node) {
-        code.append("l")
-                .append(SymbolTable.lookup(node.getId().getName()).getRegistro())
-                .append(" p P ");
+
+        Attributes attr = SymbolTable.lookup(node.getId().getName());
+        if(!attr.isInitialized()){
+            log.append("Cannot print ").append(node.getId().getName()).append(", is not initialized\n");
+        } else {
+            code.append("l")
+                    .append(SymbolTable.lookup(node.getId().getName()).getRegistro())
+                    .append(" p P ");
+        }
     }
 
     @Override
@@ -55,8 +61,12 @@ public class CodeGeneratorVisitor implements IVisitor{
     @Override
     public void visit(NodeDeref node) {
 
-        code.append("l" + SymbolTable.lookup(node.getId().getName()).getRegistro() + " ");
-
+        Attributes attr = SymbolTable.lookup(node.getId().getName());
+        if(!attr.isInitialized()){
+            log.append("Cannot load ").append(node.getId().getName()).append(", is not initialized\n");
+        } else {
+            code.append("l").append(SymbolTable.lookup(node.getId().getName()).getRegistro()).append(" ");
+        }
     }
 
     @Override
@@ -69,7 +79,7 @@ public class CodeGeneratorVisitor implements IVisitor{
     @Override
     public void visit(NodeCost node) {
 
-        code.append(node.getValue() + " ");
+        code.append(node.getValue()).append(" ");
 
     }
 
@@ -94,7 +104,11 @@ public class CodeGeneratorVisitor implements IVisitor{
         node.getId().accept(this);
         node.getExpr().accept(this);
 
-        code.append("s" + SymbolTable.lookup(node.getId().getName()).getRegistro() + " ");
+        Attributes attr = SymbolTable.lookup(node.getId().getName());
+        attr.setInitialized(true);
+        node.getId().setDescription(attr);
+
+        code.append("s").append(SymbolTable.lookup(node.getId().getName()).getRegistro()).append(" ");
         code.append("0 k ");
     }
 
