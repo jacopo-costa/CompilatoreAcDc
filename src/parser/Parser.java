@@ -1,7 +1,8 @@
 package parser;
 
 import ast.*;
-import exception.SyntaxException;
+import exception.ParserException;
+import exception.ScannerException;
 import scanner.Scanner;
 import token.Token;
 import token.TokenType;
@@ -22,7 +23,7 @@ public class Parser {
 
     }
 
-    private NodeProgram parsePrg() throws Exception {
+    private NodeProgram parsePrg() throws ScannerException, ParserException {
         Token tk = scanner.peekToken();
         ArrayList<NodeDecSt> decSts = new ArrayList<>();
 
@@ -32,11 +33,11 @@ public class Parser {
                 match(TokenType.EOF);
                 return np;
             }
-            default -> throw new SyntaxException("Unexpected token in parsePrg");
+            default -> throw new ParserException("Unexpected token in parsePrg");
         }
     }
 
-    private ArrayList<NodeDecSt> parseDSs(ArrayList<NodeDecSt> decSts) throws Exception {
+    private ArrayList<NodeDecSt> parseDSs(ArrayList<NodeDecSt> decSts) throws ParserException, ScannerException {
         Token tk = scanner.peekToken();
 
         switch (tk.getTipo()) {
@@ -51,12 +52,12 @@ public class Parser {
             case EOF -> {
                 return decSts;
             }
-            default -> throw new SyntaxException("Unexpected value parseDSs: " + tk.getTipo());
+            default -> throw new ParserException("Unexpected value parseDSs: " + tk.getTipo());
         }
         return decSts;
     }
 
-    private NodeStm parseStm() throws Exception {
+    private NodeStm parseStm() throws ScannerException, ParserException {
         Token tk = scanner.peekToken();
 
         switch (tk.getTipo()) {
@@ -73,11 +74,11 @@ public class Parser {
                 match(TokenType.SEMI);
                 return new NodeAssign(new NodeId(id), exp);
             }
-            default -> throw new SyntaxException("Unexpected value parseStm: " + tk.getTipo());
+            default -> throw new ParserException("Unexpected value parseStm: " + tk.getTipo());
         }
     }
 
-    private NodeDecl parseDcl() throws Exception {
+    private NodeDecl parseDcl() throws ScannerException, ParserException {
         Token tk = scanner.peekToken();
 
         switch (tk.getTipo()) {
@@ -93,11 +94,11 @@ public class Parser {
                 match(TokenType.SEMI);
                 return new NodeDecl(new NodeId(id), LangType.INT);
             }
-            default -> throw new SyntaxException("Unexpected value parseDcl: " + tk.getTipo());
+            default -> throw new ParserException("Unexpected value parseDcl: " + tk.getTipo());
         }
     }
 
-    private NodeExpr parseExp() throws Exception {
+    private NodeExpr parseExp() throws ParserException, ScannerException {
         Token tk = scanner.peekToken();
 
         switch (tk.getTipo()) {
@@ -105,11 +106,11 @@ public class Parser {
                 NodeExpr ter = parseTr();
                 return parseExpP(ter);
             }
-            default -> throw new SyntaxException("Unexpected value parseExp: " + tk.getTipo());
+            default -> throw new ParserException("Unexpected value parseExp: " + tk.getTipo());
         }
     }
 
-    private NodeExpr parseExpP(NodeExpr left) throws Exception {
+    private NodeExpr parseExpP(NodeExpr left) throws ScannerException, ParserException {
         Token tk = scanner.peekToken();
 
         switch (tk.getTipo()) {
@@ -126,11 +127,11 @@ public class Parser {
             case SEMI:
                 return left;
             default:
-                throw new SyntaxException("Unexpected value parseExpP: " + tk.getTipo());
+                throw new ParserException("Unexpected value parseExpP: " + tk.getTipo());
         }
     }
 
-    private NodeExpr parseTr() throws Exception {
+    private NodeExpr parseTr() throws ParserException, ScannerException {
         Token tk = scanner.peekToken();
 
         switch (tk.getTipo()) {
@@ -138,11 +139,11 @@ public class Parser {
                 NodeExpr cost = parseVal();
                 return parseTrP(cost);
             }
-            default -> throw new SyntaxException("Unexpected value parseTr: " + tk.getTipo());
+            default -> throw new ParserException("Unexpected value parseTr: " + tk.getTipo());
         }
     }
 
-    private NodeExpr parseTrP(NodeExpr left) throws Exception {
+    private NodeExpr parseTrP(NodeExpr left) throws ScannerException, ParserException {
         Token tk = scanner.peekToken();
 
         switch (tk.getTipo()) {
@@ -169,11 +170,11 @@ public class Parser {
             case SEMI:
                 return left;
             default:
-                throw new SyntaxException("Unexpected value parseTrP: " + tk.getTipo());
+                throw new ParserException("Unexpected value parseTrP: " + tk.getTipo());
         }
     }
 
-    private NodeExpr parseVal() throws Exception {
+    private NodeExpr parseVal() throws ScannerException, ParserException {
         Token tk = scanner.peekToken();
 
         switch (tk.getTipo()) {
@@ -186,16 +187,16 @@ public class Parser {
             case ID:
                 return new NodeDeref(new NodeId(match(TokenType.ID).getVal()));
             default:
-                throw new SyntaxException("Unexpected value parseVal: " + tk.getTipo() + " " + tk.getVal());
+                throw new ParserException("Unexpected value parseVal: " + tk.getTipo());
         }
     }
 
-    private Token match(TokenType type) throws Exception {
+    private Token match(TokenType type) throws ScannerException, ParserException {
         Token tk = scanner.peekToken();
 
         if (type.equals(tk.getTipo())) {
             return scanner.nextToken();
-        } else throw new SyntaxException("Expected: " + type + " Got: " + tk.getTipo() + " At: " + tk.getRiga());
+        } else throw new ParserException("Expected: " + type + " Got: " + tk.getTipo() + " At: " + tk.getRiga());
         // aspettato "type" token invece di tk alla riga tk.getRiga()
     }
 }

@@ -1,6 +1,6 @@
 package scanner;
 
-import exception.LexicalException;
+import exception.ScannerException;
 import token.Token;
 import token.TokenType;
 
@@ -40,17 +40,11 @@ public class Scanner {
 
         currentToken = null;
 
-        skipChars = new ArrayList<>(
-                Arrays.asList(' ', '\n', '\t', '\r', EOF));
+        skipChars = new ArrayList<>(Arrays.asList(' ', '\n', '\t', '\r', EOF));
 
-        letters = new ArrayList<>(
-                Arrays.asList('a', 'b', 'c', 'd', 'e', 'f',
-                        'g', 'h', 'i', 'j', 'k', 'l', 'm',
-                        'n', 'o', 'p', 'q', 'r', 's', 't',
-                        'u', 'v', 'w', 'x', 'y', 'z'));
+        letters = new ArrayList<>(Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'));
 
-        numbers = new ArrayList<>(
-                Arrays.asList('0', '1', '2', '3', '4', '5', '6', '7', '8', '9'));
+        numbers = new ArrayList<>(Arrays.asList('0', '1', '2', '3', '4', '5', '6', '7', '8', '9'));
 
         operatorsMap = new HashMap<>();
         keyWordsMap = new HashMap<>();
@@ -74,7 +68,7 @@ public class Scanner {
         if (currentToken == null) {
             try {
                 currentToken = nextToken();
-            } catch (IOException | LexicalException e) {
+            } catch (ScannerException e) {
                 e.printStackTrace();
             }
         }
@@ -83,7 +77,7 @@ public class Scanner {
 
     }
 
-    public Token nextToken() throws IOException, LexicalException {
+    public Token nextToken() throws ScannerException {
 
         // Se c'è un valore in currentToken lo riporta a null
         // e ritorna il valore precedente
@@ -120,7 +114,7 @@ public class Scanner {
             try {
                 return scanNumber();
             } catch (Exception e) {
-                throw new LexicalException(e.getMessage());
+                throw new ScannerException(e.getMessage());
             }
         }
 
@@ -133,7 +127,7 @@ public class Scanner {
             try {
                 return scanId();
             } catch (Exception e) {
-                throw new LexicalException(e.getMessage());
+                throw new ScannerException(e.getMessage());
             }
         }
 
@@ -152,18 +146,27 @@ public class Scanner {
 
     }
 
-    private char peekChar() throws IOException {
-        char c = (char) buffer.read();
-        buffer.unread(c);
-        return c;
+    private char peekChar() {
+        char c = 0;
+        try {
+            c = (char) buffer.read();
+            buffer.unread(c);
+            return c;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private char readChar() throws IOException {
-        return ((char) this.buffer.read());
+    private char readChar() {
+        try {
+            return ((char) this.buffer.read());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
-    private Token scanId() throws Exception {
+    private Token scanId() {
 
         char nextChar = peekChar();
         StringBuilder id = new StringBuilder();
@@ -189,7 +192,7 @@ public class Scanner {
         return new Token(TokenType.ID, riga, id.toString());
     }
 
-    private Token scanNumber() throws Exception {
+    private Token scanNumber() throws ScannerException {
 
         char nextChar = peekChar();
         TokenType type = TokenType.INT;
@@ -209,7 +212,7 @@ public class Scanner {
             nextChar = peekChar();
 
             if (!numbers.contains(nextChar)) {
-                throw new LexicalException("Trovato un carattere illegale dopo un punto float");
+                throw new ScannerException("Illegal character after float point");
             }
             //Legge al più 5 numeri dopo la virgola
             for (int i = 0; i <= 4; i++) {
@@ -220,14 +223,14 @@ public class Scanner {
                 } else if (skipChars.contains(nextChar) || operatorsMap.containsKey(nextChar)) {
                     return new Token(type, riga, number.toString());
                 } else {
-                    throw new LexicalException("Carattere illegale in float");
+                    throw new ScannerException("Illegal character after float point");
                 }
             }
             if (numbers.contains(nextChar)) {
-                throw new LexicalException("Eccessivi decimali dopo la virgola");
+                throw new ScannerException("Excessive decimal numbers in float");
             }
         } else if (!skipChars.contains(nextChar) && !operatorsMap.containsKey(nextChar)) {
-            throw new LexicalException("Numero seguito da un carattere illegale");
+            throw new ScannerException("Illegal character after int number");
         }
 
         return new Token(type, riga, number.toString());

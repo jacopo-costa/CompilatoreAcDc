@@ -4,9 +4,10 @@ import visitor.IVisitor;
 
 public class NodeBinOp extends NodeExpr {
 
-    private LangOper op;
+    private final LangOper op;
     private NodeExpr left;
     private NodeExpr right;
+
 
     public NodeBinOp(LangOper op, NodeExpr left, NodeExpr right) {
         this.op = op;
@@ -22,8 +23,16 @@ public class NodeBinOp extends NodeExpr {
         return left;
     }
 
+    public void setLeft(NodeExpr left) {
+        this.left = left;
+    }
+
     public NodeExpr getRight() {
         return right;
+    }
+
+    public void setRight(NodeExpr right) {
+        this.right = right;
     }
 
     @Override

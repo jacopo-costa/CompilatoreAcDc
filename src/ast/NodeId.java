@@ -5,9 +5,8 @@ import visitor.IVisitor;
 
 public class NodeId extends NodeAST {
 
-    private Attributes description;
-
     private final String name;
+    private Attributes description;
 
     public NodeId(String name) {
         this.name = name;

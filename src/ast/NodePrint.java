@@ -4,7 +4,7 @@ import visitor.IVisitor;
 
 public class NodePrint extends NodeStm {
 
-    private NodeId id;
+    private final NodeId id;
 
     public NodePrint(NodeId id) {
         this.id = id;

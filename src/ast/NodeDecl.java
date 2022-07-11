@@ -4,8 +4,8 @@ import visitor.IVisitor;
 
 public class NodeDecl extends NodeDecSt {
 
-    private NodeId id;
-    private LangType type;
+    private final NodeId id;
+    private final LangType type;
 
     public NodeDecl(NodeId id, LangType type) {
         this.id = id;

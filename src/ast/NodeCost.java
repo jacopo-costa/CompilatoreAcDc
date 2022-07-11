@@ -4,8 +4,8 @@ import visitor.IVisitor;
 
 public class NodeCost extends NodeExpr {
 
-    private String value;
-    private LangType type;
+    private final String value;
+    private final LangType type;
 
     public NodeCost(String value, LangType type) {
         this.value = value;

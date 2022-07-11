@@ -1,11 +1,12 @@
 package test;
 
-import exception.LexicalException;
+import exception.ScannerException;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.annotation.Testable;
 import scanner.Scanner;
 import token.TokenType;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,13 +15,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class TestScanner {
 
     @Test
-    void erroriIdNumbers() throws IOException, LexicalException {
+    void erroriIdNumbers() throws ScannerException, FileNotFoundException {
 
         Scanner scan = new Scanner("/home/jacopo/Git/CompilatoreAcDc/src/test/data/testScanner/erroriIdNumbers.txt");
 
         //123. r1
-        LexicalException exc = assertThrows(LexicalException.class, () -> scan.nextToken());
-        assertEquals("Trovato un carattere illegale dopo un punto float", exc.getMessage());
+        ScannerException exc = assertThrows(ScannerException.class, () -> scan.nextToken());
+        assertEquals("Illegal character after float point", exc.getMessage());
 
         //asd r1
         assertEquals("<ID,r:1,asd>", scan.nextToken().toString());
@@ -47,12 +48,12 @@ class TestScanner {
         assertNull(scan.nextToken());
 
         //123. r4
-        LexicalException exc2 = assertThrows(LexicalException.class, () -> scan.nextToken());
-        assertEquals("Trovato un carattere illegale dopo un punto float", exc2.getMessage());
+        ScannerException exc2 = assertThrows(ScannerException.class, () -> scan.nextToken());
+        assertEquals("Illegal character after float point", exc2.getMessage());
 
         //123 r5
-        LexicalException exc3 = assertThrows(LexicalException.class, () -> scan.nextToken());
-        assertEquals("Numero seguito da un carattere illegale", exc3.getMessage());
+        ScannerException exc3 = assertThrows(ScannerException.class, () -> scan.nextToken());
+        assertEquals("Illegal character after int number", exc3.getMessage());
 
         //asd r5
         assertEquals("<ID,r:5,asd>", scan.nextToken().toString());
@@ -63,7 +64,7 @@ class TestScanner {
     }
 
     @Test
-    void testEOF() throws LexicalException, IOException {
+    void testEOF() throws ScannerException, IOException {
 
         Scanner scan = new Scanner("src/test/data/testScanner/testEOF.txt");
 
@@ -72,22 +73,22 @@ class TestScanner {
     }
 
     @Test
-    void testFLOAT() throws IOException, LexicalException {
+    void testFLOAT() throws IOException, ScannerException {
 
         Scanner scan = new Scanner("src/test/data/testScanner/testFLOAT.txt");
 
         assertEquals("<FLOAT,r:1,098.895>", scan.nextToken().toString());
 
-        LexicalException exc = assertThrows(LexicalException.class, () -> scan.nextToken());
-        assertEquals("Trovato un carattere illegale dopo un punto float", exc.getMessage());
+        ScannerException exc = assertThrows(ScannerException.class, () -> scan.nextToken());
+        assertEquals("Illegal character after float point", exc.getMessage());
 
-        LexicalException exc2 = assertThrows(LexicalException.class, () -> scan.nextToken());
-        assertEquals("Eccessivi decimali dopo la virgola", exc2.getMessage());
+        ScannerException exc2 = assertThrows(ScannerException.class, () -> scan.nextToken());
+        assertEquals("Excessive decimal numbers in float", exc2.getMessage());
 
     }
 
     @Test
-    void testGenerale() throws LexicalException, IOException {
+    void testGenerale() throws ScannerException, IOException {
 
         Scanner scan = new Scanner("src/test/data/testScanner/testGenerale.txt");
 
@@ -97,8 +98,8 @@ class TestScanner {
 
         assertEquals("<ID,r:2,temp>", scan.nextToken().toString());
         assertEquals(TokenType.ASSIGN, scan.nextToken().getTipo());
-        LexicalException exc = assertThrows(LexicalException.class, () -> scan.nextToken());
-        assertEquals("Trovato un carattere illegale dopo un punto float", exc.getMessage());
+        ScannerException exc = assertThrows(ScannerException.class, () -> scan.nextToken());
+        assertEquals("Illegal character after float point", exc.getMessage());
         assertEquals(TokenType.SEMI, scan.nextToken().getTipo());
 
         assertEquals(TokenType.TYFLOAT, scan.nextToken().getTipo());
@@ -119,7 +120,7 @@ class TestScanner {
     }
 
     @Test
-    void testID() throws LexicalException, IOException {
+    void testID() throws ScannerException, IOException {
 
         Scanner scan = new Scanner("src/test/data/testScanner/testID.txt");
 
@@ -130,7 +131,7 @@ class TestScanner {
     }
 
     @Test
-    void testINT() throws LexicalException, IOException {
+    void testINT() throws ScannerException, IOException {
 
         Scanner scan = new Scanner("src/test/data/testScanner/testINT.txt");
 
@@ -139,7 +140,7 @@ class TestScanner {
     }
 
     @Test
-    void testKeywords() throws LexicalException, IOException {
+    void testKeywords() throws ScannerException, IOException {
 
         Scanner scan = new Scanner("src/test/data/testScanner/testKeywords.txt");
 
@@ -150,7 +151,7 @@ class TestScanner {
     }
 
     @Test
-    void testOperators() throws LexicalException, IOException {
+    void testOperators() throws ScannerException, IOException {
 
         Scanner scan = new Scanner("src/test/data/testScanner/testOperators.txt");
 
@@ -164,7 +165,7 @@ class TestScanner {
     }
 
     @Test
-    void testScanId() throws LexicalException, IOException {
+    void testScanId() throws ScannerException, IOException {
 
         Scanner scan = new Scanner("src/test/data/testScanner/testScanId.txt");
 

@@ -2,9 +2,6 @@ package ast;
 
 public enum LangOper {
 
-    PLUS,
-    MINUS,
-    DIV,
-    TIMES;
+    PLUS, MINUS, DIV, TIMES
 
 }

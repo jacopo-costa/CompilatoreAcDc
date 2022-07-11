@@ -7,9 +7,9 @@ import java.util.Iterator;
 
 public class NodeProgram extends NodeAST implements Iterable<NodeDecSt> {
 
-    private int i = 0;
+    private final int i = 0;
 
-    private ArrayList<NodeDecSt> decSts;
+    private final ArrayList<NodeDecSt> decSts;
 
     public NodeProgram(ArrayList<NodeDecSt> decSts) {
         this.decSts = decSts;

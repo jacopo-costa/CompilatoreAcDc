@@ -3,7 +3,7 @@ package ast;
 import visitor.IVisitor;
 
 public class NodeDeref extends NodeExpr {
-    private NodeId id;
+    private final NodeId id;
 
     public NodeDeref(NodeId id) {
         this.id = id;
