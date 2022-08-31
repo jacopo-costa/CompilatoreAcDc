@@ -45,7 +45,9 @@ public class CodeGeneratorVisitor implements IVisitor{
     public void visit(NodePrint node) {
 
         Attributes attr = SymbolTable.lookup(node.getId().getName());
-        if(!attr.isInitialized()){
+        if(attr == null){
+            log.append("Cannot print ").append(node.getId().getName()).append(", is not initialized\n");
+        } else if(!attr.isInitialized()){
             log.append("Cannot print ").append(node.getId().getName()).append(", is not initialized\n");
         } else {
             code.append("l")
