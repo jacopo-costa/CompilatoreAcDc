@@ -7,8 +7,6 @@ import java.util.Iterator;
 
 public class NodeProgram extends NodeAST implements Iterable<NodeDecSt> {
 
-    private final int i = 0;
-
     private final ArrayList<NodeDecSt> decSts;
 
     public NodeProgram(ArrayList<NodeDecSt> decSts) {
@@ -26,7 +24,7 @@ public class NodeProgram extends NodeAST implements Iterable<NodeDecSt> {
     }
 
     @Override
-    public Iterator iterator() {
+    public Iterator<NodeDecSt> iterator() {
         return decSts.iterator();
     }
 }

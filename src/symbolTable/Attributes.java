@@ -6,7 +6,7 @@ public class Attributes {
 
     private LangType type;
 
-    private char registro;
+    private char register;
 
     private boolean initialized = false;
 
@@ -18,12 +18,12 @@ public class Attributes {
         return initialized;
     }
 
-    public char getRegistro() {
-        return registro;
+    public char getRegister() {
+        return register;
     }
 
-    public void setRegistro(char registro) {
-        this.registro = registro;
+    public void setRegister(char register) {
+        this.register = register;
     }
 
     public Attributes(LangType type) {

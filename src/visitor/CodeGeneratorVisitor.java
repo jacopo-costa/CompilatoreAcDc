@@ -6,6 +6,7 @@ import symbolTable.SymbolTable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 public class CodeGeneratorVisitor implements IVisitor{
@@ -36,9 +37,13 @@ public class CodeGeneratorVisitor implements IVisitor{
 
     @Override
     public void visit(NodeProgram node) {
-        for(NodeDecSt n : node){
+        Iterator<NodeDecSt> it = node.iterator();
+
+        while(it.hasNext()){
+            NodeDecSt n = it.next();
             n.accept(this);
         }
+
     }
 
     @Override
@@ -51,7 +56,7 @@ public class CodeGeneratorVisitor implements IVisitor{
             log.append("Cannot print ").append(node.getId().getName()).append(", is not initialized\n");
         } else {
             code.append("l")
-                    .append(SymbolTable.lookup(node.getId().getName()).getRegistro())
+                    .append(SymbolTable.lookup(node.getId().getName()).getRegister())
                     .append(" p P ");
         }
     }
@@ -67,14 +72,14 @@ public class CodeGeneratorVisitor implements IVisitor{
         if(!attr.isInitialized()){
             log.append("Cannot load ").append(node.getId().getName()).append(", is not initialized\n");
         } else {
-            code.append("l").append(SymbolTable.lookup(node.getId().getName()).getRegistro()).append(" ");
+            code.append("l").append(SymbolTable.lookup(node.getId().getName()).getRegister()).append(" ");
         }
     }
 
     @Override
     public void visit(NodeDecl node) {
         Attributes attr = SymbolTable.lookup(node.getId().getName());
-        attr.setRegistro(newRegister());
+        attr.setRegister(newRegister());
         node.getId().setDescription(attr);
     }
 
@@ -110,7 +115,7 @@ public class CodeGeneratorVisitor implements IVisitor{
         attr.setInitialized(true);
         node.getId().setDescription(attr);
 
-        code.append("s").append(SymbolTable.lookup(node.getId().getName()).getRegistro()).append(" ");
+        code.append("s").append(SymbolTable.lookup(node.getId().getName()).getRegister()).append(" ");
         code.append("0 k ");
     }
 

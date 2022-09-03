@@ -4,6 +4,8 @@ import ast.*;
 import symbolTable.Attributes;
 import symbolTable.SymbolTable;
 
+import java.util.Iterator;
+
 public class TypeCheckingVisitor implements IVisitor {
 
     private final StringBuilder log = new StringBuilder();
@@ -15,12 +17,16 @@ public class TypeCheckingVisitor implements IVisitor {
     @Override
     public void visit(NodeProgram node) {
         boolean err = false;
-        for (NodeDecSt n : node) {
+        Iterator<NodeDecSt> it = node.iterator();
+
+        while(it.hasNext()){
+            NodeDecSt n = it.next();
             n.accept(this);
             if (n.getResType() == TypeDescriptor.ERROR) {
                 err = true;
             }
         }
+
         if(err){
             node.setResType(TypeDescriptor.ERROR);
         } else {
